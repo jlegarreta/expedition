@@ -1,0 +1,20 @@
+#!/bin/sh
+
+case ${1:-} in
+  -s)
+    case ${2:-} in
+      expedition-beta)
+        echo "Version: 1.1.38"
+      ;;
+      expeditionml-dependencies-beta)
+        echo "Version: 0.1.3-h2"
+      ;;
+    esac
+    ;;
+  -l)
+    cat <<EOF
+ii  expedition-beta 1.1.38                                     amd64        Expedition VM system files
+ii  expeditionml-dependencies-beta 0.1.3-h2                                   amd64        Expedition Machine Learning dependencies
+EOF
+    ;;
+esac
