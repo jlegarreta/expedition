@@ -9,6 +9,9 @@ else
   mv /var/lib/mysql.bak /var/lib/mysql
 fi
 
+# Fix mysql directory permissions
+chown -R mysql:mysql /var/lib/mysql
+
 echo 'Starting all services for expedition...'
 
 # Rsyslog
