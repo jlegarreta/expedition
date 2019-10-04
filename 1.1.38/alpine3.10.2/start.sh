@@ -9,8 +9,9 @@ else
   mv /var/lib/mysql.bak /var/lib/mysql
 fi
 
-# Fix mysql directory permissions
+# Fix ownership
 chown -R mysql:mysql /var/lib/mysql
+chown -R apache:apache /data
 
 echo 'Starting all services for expedition...'
 
