@@ -32,16 +32,17 @@ echo '* Starting mysql...'
 mysqld_safe --nowatch --datadir='/var/lib/mysql'
 sleep 5
 
+# Generate /home/userSpace/environmentParameters.php
+rm -f /home/userSpace/environmentParameters.php
+sudo -u apache /bin/sh /var/www/html/OS/spark/scripts/getCPUs.sh
+rm -f /var/run/apache2/httpd.pid
+
 # Apache
 echo '* Starting apache...'
 apachectl start
 
-# Generate /home/userSpace/environmentParameters.php
-rm -f /home/userSpace/environmentParameters.php
-sudo -u apache /bin/sh /var/www/html/OS/spark/scripts/getCPUs.sh
-
 # Initialize ML settings
-mysql -uroot -ppaloalto -e "INSERT INTO pandbRBAC.ml_settings(server) values('$(hostname -i)')"
+mysql -uroot -ppaloalto -e "TRUNCATE TABLE pandbRBAC.ml_settings; INSERT INTO pandbRBAC.ml_settings(server) values('$(hostname -i)')"
 
 # PanReadOrders 
 echo '* Starting PanReadOrders...'
@@ -49,4 +50,4 @@ while ! nc -w 1 localhost 5672 </dev/null; do
   echo "waiting on rabbitmq..."
   sleep 2
 done
-sudo -u apache sh /var/www/html/OS/startup/pan-readOrders start
+sudo -u apache /bin/sh /var/www/html/OS/startup/pan-readOrders start
