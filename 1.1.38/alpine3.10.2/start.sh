@@ -42,7 +42,11 @@ echo '* Starting apache...'
 apachectl start
 
 # Initialize ML settings
-mysql -uroot -ppaloalto -e "TRUNCATE TABLE pandbRBAC.ml_settings; INSERT INTO pandbRBAC.ml_settings(server) values('$(hostname -i)')"
+mysql -uroot -ppaloalto <<-EOF
+DELETE FROM pandbRBAC.ml_settings;
+ALTER TABLE pandbRBAC.ml_settings AUTO_INCREMENT = 1;
+INSERT INTO pandbRBAC.ml_settings(server) values('$(hostname -i)');
+EOF
 
 # PanReadOrders 
 echo '* Starting PanReadOrders...'
