@@ -93,8 +93,16 @@ echo 'Remediating known issues...'
 mkdir /boot
 sed -i "s/define ('DBSQL_LOG_BIN', 1);/define ('DBSQL_LOG_BIN', 0);/g" /home/userSpace/userDefinitions.php
 
-echo 'Cleaning up...'
+echo 'Stopping services...'
+kill $(cat /var/run/rsyslogd.pid)
+kill $(cat /var/run/sshd.pid)
+sudo -u rabbitmq -- rabbitmqctl stop
 mysqladmin -uroot -ppaloalto shutdown
+sudo -u apache sh /var/www/html/OS/startup/pan-readOrders stop 2>/dev/null
+apachectl stop
+
+echo 'Cleaning up...'
+rm /var/lib/mysql/*.err
 mv /var/lib/mysql /var/lib/mysql.bak
 rm -rf databases var opt install.sh mariadb-server.cnf
 set +e
